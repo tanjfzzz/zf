@@ -4,18 +4,22 @@ session_start();
 $id=session_id();
 $_SESSION['id']=$id;
 
-$cookie = dirname(__FILE__) . '/cookie/'.$_SESSION['id'].'.txt'; //cookie路径，必须手动建立cookie目录
-$verify_code_url = "http://202.116.160.170/CheckCode.aspx"; //验证码地址
-$curl = curl_init();
-curl_setopt($curl, CURLOPT_URL, $verify_code_url);
-curl_setopt($curl, CURLOPT_COOKIEJAR, $cookie);  //保存cookie
-curl_setopt($curl, CURLOPT_HEADER, 0);
-curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-$img = curl_exec($curl);  //执行curl
-curl_close($curl);
-$fp = fopen("verifyCode.jpg","w");  //文件名
-fwrite($fp,$img);  //写入文件 
-fclose($fp);
+function getCode($codeUrl){
+        $cookie = dirname(__FILE__) . '/cookie/'.$_SESSION['id'].'.txt'; //cookie路径，必须手动建立cookie目录
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $codeUrl);
+        curl_setopt($curl, CURLOPT_COOKIEJAR, $cookie);  //保存cookie
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $img = curl_exec($curl);  //执行curl
+        curl_close($curl);
+        $fp = fopen("verifyCode.jpg","w");  //文件名
+        fwrite($fp,$img);  //写入文件 
+        fclose($fp);
+}
+
+$codeUrl="http://202.116.160.170/CheckCode.aspx";
+getCode($codeUrl);
 
 ?>
 
